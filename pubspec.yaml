@@ -1,0 +1,72 @@
+name: lessonplan
+description: "Lesson Plan Generator"
+version: 1.0.0
+publish_to: none
+
+environment:
+  sdk: ">=3.2.3 <4.0.0" # Updated to a more standard version constraint
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # ICONS
+  cupertino_icons: ^1.0.8
+
+  # STATE MANAGEMENT & DI
+  flutter_bloc: ^9.1.1
+  get_it: ^8.2.0
+  equatable: ^2.0.5 # <-- ADDED: Essential for object comparison in dropdowns
+
+  # ROUTING
+  auto_route: ^10.1.2
+
+  # NETWORKING
+  dio: ^5.9.0
+  connectivity_plus: ^7.0.0
+
+  # ASSETS
+  jovial_svg: ^1.1.28
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^6.0.0
+  auto_route_generator: ^10.2.4
+  build_runner: ^2.4.10 # Often needed with auto_route_generator
+
+flutter:
+  uses-material-design: true
+
+  fonts:
+    - family: "Inter"
+      fonts:
+        - asset: fonts/Inter-Black.ttf
+          weight: 900
+        - asset: fonts/Inter-ExtraBold.ttf
+          weight: 800
+        - asset: fonts/Inter-Bold.ttf
+          weight: 700
+        - asset: fonts/Inter-SemiBold.ttf
+          weight: 600
+        - asset: fonts/Inter-Medium.ttf
+          weight: 500
+        - asset: fonts/Inter-Regular.ttf
+          weight: 400
+        - asset: fonts/Inter-Light.ttf
+          weight: 300
+        - asset: fonts/Inter-ExtraLight.ttf
+          weight: 200
+        - asset: fonts/Inter-Thin.ttf
+          weight: 100
+
+  assets:
+    # Your asset declarations are perfect. Just place the images in the correct subfolders.
+    - configuration/
+    - assets/images/
+    - assets/images/svgs/
+    - assets/images/icons/
+    - assets/images/gif/
+    - assets/lottie/
+    - assets/images/avatars/

@@ -1,0 +1,14 @@
+{
+    "base_url": "https://reports.iprep.in",
+    "is_encrypted": true,
+    "decpass": "my secret key",
+    "initvector": "SLEBijJ3sN69otbw",
+    "authorizationToken": "iuh9ey93823ehSWD23E2EQWEFiuhe8923yeh",
+    "personalAccessTokenVimeo": "c031492656c179bb54d1fa6f063a56e9",
+    "type": "standalone",
+    "showBoardChip": false,
+    "showSearch": false,
+    "show_aitools": true,
+    "cgf_username": "idreameducation",
+    "cgf_password": "idream@education2025"
+}
