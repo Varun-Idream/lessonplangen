@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:lessonplan/presentation/dahsboard/dashboard.dart';
 import 'package:lessonplan/presentation/lessonplan/lesson_plan_screen.dart';
+import 'package:lessonplan/presentation/pdfexport/pdfexport.dart';
 
 part 'router.gr.dart';
 
@@ -15,12 +16,16 @@ class AppRouter extends RootStackRouter {
   List<AutoRoute> get routes => [
         AutoRoute(
           page: DashboardRoute.page,
-          path: "/",
-          initial: true,
+          path: "/dashboard",
         ),
         AutoRoute(
           page: LessonPlanRoute.page,
           path: "/lessonplan",
+        ),
+        AutoRoute(
+          initial: true,
+          page: PdfExportRoute.page,
+          path: "/",
         ),
       ];
 

@@ -11,16 +11,26 @@ enum AppType {
 }
 
 enum LessonPlanStatus {
-  metaDataPost,
+  metaDataPostLoading,
+  metaDataPostFailure,
+  metaDataGetLoading,
   metaDataGet,
-  alignmentDataPost,
-  alignmentDataGet,
+  metaDataGetFailure,
+  finalizeDataPostLoading,
+  finalizeDataPost,
+  finalizeDataPostFailure,
+  finalizeDataGetLoading,
+  finalizeDataGet,
+  finalizeDataGetFailure,
+  generationDataPostLoading,
   generationDataPost,
+  generationDataPostFailure,
+  generationDataGetLoading,
   generationDataGet,
-  success,
-  failed,
+  generationDataGetFailure,
   exsists,
   limitReached,
+  internalFailure,
 }
 
 abstract class TextStyles {

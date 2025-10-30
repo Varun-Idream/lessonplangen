@@ -38,18 +38,32 @@ class LessonPlanSubjectsState extends LessonPlanState {
 
 class LessonPlanSubjectsFailedState extends LessonPlanState {}
 
-class LessonPlanGenerationFailedState extends LessonPlanState {
+class LessonPlanGeneration extends LessonPlanState {
+  final String lessonPlanID;
+  final Map<String, dynamic> data;
   final LessonPlanStatus status;
 
-  LessonPlanGenerationFailedState({
+  LessonPlanGeneration({
+    required this.lessonPlanID,
+    required this.data,
     required this.status,
   });
 }
 
-class LessonPlanGenerationState extends LessonPlanState {
+class LessonPlanLoadingState extends LessonPlanState {
   final LessonPlanStatus status;
 
-  LessonPlanGenerationState({
+  LessonPlanLoadingState({
     required this.status,
+  });
+}
+
+class LessonPlanFailure extends LessonPlanState {
+  final LessonPlanStatus status;
+  final String failureMessage;
+
+  LessonPlanFailure({
+    required this.status,
+    required this.failureMessage,
   });
 }

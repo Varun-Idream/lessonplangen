@@ -21,12 +21,27 @@ dependencies:
   # ROUTING
   auto_route: ^10.1.2
 
+  #Hooks
+  flutter_hooks: ^0.21.3+1
+
   # NETWORKING
   dio: ^5.9.0
   connectivity_plus: ^7.0.0
 
   # ASSETS
   jovial_svg: ^1.1.28
+
+  #Date Formatter
+  intl: ^0.20.2
+
+  #PDF Processing
+  pdf: ^3.11.3
+
+  #Path
+  path_provider: ^2.1.5
+
+  #File
+  open_file: ^3.5.10
 
 dev_dependencies:
   flutter_test:
@@ -70,3 +85,4 @@ flutter:
     - assets/images/gif/
     - assets/lottie/
     - assets/images/avatars/
+    - assets/images/png/

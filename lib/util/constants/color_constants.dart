@@ -38,6 +38,7 @@ abstract class ColorConstants {
   static const Color incorrectGradient = Color(0x0DFF6F6F);
   static const Color tertiaryGreen = Color(0xFFDBF7F0);
   static const Color lightGreen = Color(0xFFD6EB84);
+  static const Color primaryGreen = Color(0xFF8AC926);
   static const Color primaryYellow = Color(0xFFFDC500);
   static const Color primaryOrange = Color(0xFFFB9E36);
   static const Color secondaryOrange = Color(0x50FB9E36);
@@ -74,6 +75,12 @@ abstract class ColorConstants {
   static const List<Color> bannerGradient = [
     Color(0xFFF5F9FF),
     Color(0xFFE5F1FF),
+  ];
+
+  static const List<Color> accentColors = [
+    primaryBlue,
+    primaryYellow,
+    primaryGreen,
   ];
 
   //language colors

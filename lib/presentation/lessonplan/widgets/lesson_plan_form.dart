@@ -77,6 +77,18 @@ class _LessonPlanFormState extends State<LessonPlanForm> {
           if (state is LessonPlanAuthState) {
             sl<LessonPlanCubit>().fetchBoards();
           }
+
+          if (state is LessonPlanLoadingState) {
+            if (state.status == LessonPlanStatus.metaDataPostLoading) {
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (context) {
+                  return GeneratingLessonPlanPopup();
+                },
+              );
+            }
+          }
         },
         builder: (context, state) {
           if (state is LessonPlanAuthFailedState) {
@@ -312,14 +324,6 @@ class _LessonPlanFormState extends State<LessonPlanForm> {
                                         .toString(),
                                     subjectuuid: selectedSubject.value!.uuid,
                                     topics: topicController.text,
-                                  );
-
-                                  showDialog(
-                                    context: context,
-                                    barrierDismissible: false,
-                                    builder: (context) {
-                                      return GeneratingLessonPlanPopup();
-                                    },
                                   );
                                 } catch (e) {
                                   ScaffoldMessenger.of(context).showSnackBar(
