@@ -248,13 +248,32 @@ class LessonPlanFunctions {
                         ),
                         itemCount: learningObjectives.length,
                         itemBuilder: (context, index) {
-                          return pw.Text(
-                            "\u2022 ${learningObjectives[index]}",
-                            style: pw.TextStyle(
-                              color: PdfColor.fromHex('#666666'),
-                              font: pw.Font.ttf(baseFont),
-                              fontSize: 12,
-                            ),
+                          return pw.Row(
+                            crossAxisAlignment: pw.CrossAxisAlignment.start,
+                            mainAxisAlignment: pw.MainAxisAlignment.start,
+                            children: [
+                              pw.Text(
+                                "\u2022 ",
+                                style: pw.TextStyle(
+                                  color: PdfColor.fromHex('#666666'),
+                                  font: pw.Font.ttf(baseFont),
+                                  fontSize: 12,
+                                ),
+                              ),
+                              pw.SizedBox(width: 5),
+                              pw.Expanded(
+                                child: pw.Text(
+                                  learningObjectives[index],
+                                  style: pw.TextStyle(
+                                    color: PdfColor.fromHex('#666666'),
+                                    font: pw.Font.ttf(baseFont),
+                                    fontSize: 12,
+                                  ),
+                                  maxLines: 5,
+                                  overflow: pw.TextOverflow.clip,
+                                ),
+                              ),
+                            ],
                           );
                         },
                         separatorBuilder: (context, index) {
