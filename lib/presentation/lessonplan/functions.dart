@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'dart:io';
 import 'dart:math' show Random;
 
 import 'package:flutter/material.dart';
@@ -67,7 +66,12 @@ class LessonPlanFunctions {
     });
   }
 
-  static void processPDF({
+  static String sanitize(String s) => s.replaceAllMapped(
+        RegExp(r'\\u([0-9a-fA-F]{4})'),
+        (Match m) => String.fromCharCode(int.parse(m.group(1)!, radix: 16)),
+      );
+
+  static Future<Uint8List> processPDF({
     required Map<String, dynamic> generatedData,
   }) async {
     try {
@@ -82,7 +86,7 @@ class LessonPlanFunctions {
 
       final pageFormat = PdfPageFormat(
         PdfPageFormat.a4.width,
-        PdfPageFormat.a4.height,
+        1000,
       );
 
       final pageTheme = await loadPageTheme(
@@ -162,12 +166,12 @@ class LessonPlanFunctions {
 
       pw.Widget planBlocks({
         required String implementationScript,
-        List<String> formativeQuestions = const [],
-        List<String> expectedResponse = const [],
+        List formativeQuestions = const [],
+        List expectedResponse = const [],
         String teacherNotes = '',
         bool ulImplS = true,
       }) {
-        List<String> implS = implementationScript.split("\n");
+        List<String> implS = sanitize(implementationScript).split("\n");
         implS.removeWhere((item) => item.isEmpty);
 
         return pw.Column(
@@ -345,6 +349,7 @@ class LessonPlanFunctions {
 
       pdf.addPage(
         pw.MultiPage(
+          maxPages: 200,
           pageTheme: pageTheme,
           build: (pw.Context context) {
             return [
@@ -495,7 +500,7 @@ class LessonPlanFunctions {
 
                       return pw.Container(
                         margin: pw.EdgeInsets.only(
-                          bottom: 25,
+                          bottom: 20,
                         ),
                         child: blockBox(
                           customTitle: pw.RichText(
@@ -546,7 +551,6 @@ class LessonPlanFunctions {
                         ),
                       );
                     }),
-                    pw.SizedBox(height: 20),
                     ...List.generate(developmentComponets.length, (index) {
                       final component = developmentComponets[index];
                       final firstIndex = index == 0;
@@ -560,7 +564,7 @@ class LessonPlanFunctions {
 
                       return pw.Container(
                         margin: pw.EdgeInsets.only(
-                          bottom: 25,
+                          bottom: 20,
                         ),
                         child: blockBox(
                           customTitle: pw.RichText(
@@ -609,7 +613,6 @@ class LessonPlanFunctions {
                         ),
                       );
                     }),
-                    pw.SizedBox(height: 20),
                     ...List.generate(guidedPracticeComponets.length, (index) {
                       final component = guidedPracticeComponets[index];
                       final firstIndex = index == 0;
@@ -623,7 +626,7 @@ class LessonPlanFunctions {
 
                       return pw.Container(
                         margin: pw.EdgeInsets.only(
-                          bottom: 25,
+                          bottom: 20,
                         ),
                         child: blockBox(
                           customTitle: pw.RichText(
@@ -672,7 +675,6 @@ class LessonPlanFunctions {
                         ),
                       );
                     }),
-                    pw.SizedBox(height: 20),
                     ...List.generate(ipPracticeComponents.length, (index) {
                       final component = ipPracticeComponents[index];
                       final firstIndex = index == 0;
@@ -686,7 +688,7 @@ class LessonPlanFunctions {
 
                       return pw.Container(
                         margin: pw.EdgeInsets.only(
-                          bottom: 25,
+                          bottom: 20,
                         ),
                         child: blockBox(
                           customTitle: pw.RichText(
@@ -735,7 +737,6 @@ class LessonPlanFunctions {
                         ),
                       );
                     }),
-                    pw.SizedBox(height: 20),
                     ...List.generate(closureComponets.length, (index) {
                       final component = closureComponets[index];
                       final firstIndex = index == 0;
@@ -749,7 +750,7 @@ class LessonPlanFunctions {
 
                       return pw.Container(
                         margin: pw.EdgeInsets.only(
-                          bottom: 25,
+                          bottom: 20,
                         ),
                         child: blockBox(
                           customTitle: pw.RichText(
@@ -798,7 +799,6 @@ class LessonPlanFunctions {
                         ),
                       );
                     }),
-                    pw.SizedBox(height: 20),
                     ...List.generate(assessmentComponets.length, (index) {
                       final component = assessmentComponets[index];
                       final firstIndex = index == 0;
@@ -812,7 +812,7 @@ class LessonPlanFunctions {
 
                       return pw.Container(
                         margin: pw.EdgeInsets.only(
-                          bottom: 25,
+                          bottom: 20,
                         ),
                         child: blockBox(
                           customTitle: pw.RichText(
@@ -869,12 +869,10 @@ class LessonPlanFunctions {
         ),
       );
 
-      final fileHandle = File(
-        "${Directory.current.path}\\${"Lesson Plan-${generatedData["topic"]}.pdf"}",
-      );
-      fileHandle.writeAsBytesSync(await pdf.save());
+      return await pdf.save();
     } catch (e) {
       log('$e');
+      rethrow;
     }
   }
 
@@ -905,10 +903,6 @@ class LessonPlanFunctions {
         theme: pw.ThemeData.withFont(
           base: pw.Font.ttf(baseFont),
           bold: pw.Font.ttf(boldFont),
-          fontFallback: [
-            pw.Font.helvetica(),
-            pw.Font.helveticaBold(),
-          ],
         ),
         buildBackground: (pw.Context context) {
           return pw.FullPage(

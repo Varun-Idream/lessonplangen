@@ -1,13 +1,17 @@
+import 'dart:io';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lessonplan/bloc/lessonplan/lesson_plan_cubit.dart';
 import 'package:lessonplan/presentation/core/fade_in_modal.dart';
 import 'package:lessonplan/presentation/lessonplan/functions.dart';
+import 'package:lessonplan/presentation/lessonplan/lesson_plan_screen.dart';
 import 'package:lessonplan/services/injection/getit.dart';
 import 'package:lessonplan/util/constants/assets.dart';
 import 'package:lessonplan/util/constants/color_constants.dart';
 import 'package:lessonplan/util/constants/constants.dart';
+import 'package:lessonplan/util/router/router.dart';
 
 import 'success_created_popup.dart';
 
@@ -43,17 +47,40 @@ class GeneratingLessonPlanPopup extends StatelessWidget {
                 case LessonPlanStatus.generationDataGet:
                   generationState.value = 1.0;
                   context.router.pop();
+                  generationState.value = 0.0;
 
                   LessonPlanFunctions.processPDF(
                     generatedData: state.data,
-                  );
+                  ).then((fileBytes) {
+                    if (sl<AppRouter>().navigatorKey.currentContext != null) {
+                      showDialog(
+                        context: sl<AppRouter>().navigatorKey.currentContext!,
+                        builder: (context) {
+                          return SuccessCreatedPopup(
+                            lessonPlanHistory: () {
+                              context.router.pop();
+                              selectedTab.value = 0;
+                            },
+                            downloadPdf: () {
+                              final fileHandle = File(
+                                "${Directory.current.path}\\${"Lesson Plan-${state.data["topic"]}.pdf"}",
+                              );
+                              fileHandle.writeAsBytesSync(fileBytes);
+                            },
+                          );
+                        },
+                      );
+                    }
+                  }).catchError((e) {
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('$e'),
+                        ),
+                      );
+                    }
+                  });
 
-                  showDialog(
-                    context: context,
-                    builder: (context) {
-                      return SuccessCreatedPopup();
-                    },
-                  );
                   break;
                 default:
                   break;

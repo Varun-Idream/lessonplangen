@@ -18,7 +18,7 @@ class _LessonPlanBuilderState extends State<LessonPlanBuilder> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           LessonPlanBanner(),
-          const SizedBox(height: 36),
+          const SizedBox(height: 25),
           LessonPlanForm(),
         ],
       ),

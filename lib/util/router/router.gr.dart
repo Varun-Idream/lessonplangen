@@ -41,19 +41,3 @@ class LessonPlanRoute extends PageRouteInfo<void> {
     },
   );
 }
-
-/// generated route for
-/// [PdfExportPage]
-class PdfExportRoute extends PageRouteInfo<void> {
-  const PdfExportRoute({List<PageRouteInfo>? children})
-      : super(PdfExportRoute.name, initialChildren: children);
-
-  static const String name = 'PdfExportRoute';
-
-  static PageInfo page = PageInfo(
-    name,
-    builder: (data) {
-      return const PdfExportPage();
-    },
-  );
-}
