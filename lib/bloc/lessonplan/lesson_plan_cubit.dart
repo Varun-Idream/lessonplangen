@@ -5,7 +5,9 @@ import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lessonplan/config/config_reader.dart';
 import 'package:lessonplan/models/form_data_models.dart';
+import 'package:lessonplan/models/lesson_plan_history_model.dart';
 import 'package:lessonplan/services/api/api.service.dart';
+import 'package:lessonplan/services/hive_service.dart';
 import 'package:lessonplan/util/constants/constants.dart';
 
 part 'lesson_plan_state.dart';
@@ -14,6 +16,13 @@ class LessonPlanCubit extends Cubit<LessonPlanState> {
   LessonPlanCubit() : super(LessonPlanInitialState());
 
   Timer? pollingTimer;
+
+  // Store metadata for saving history later
+  String? _currentBoardName;
+  String? _currentGradeName;
+  String? _currentSubjectName;
+  String? _currentDuration;
+  String? _currentTopics;
 
   void authenticateUser() async {
     try {
@@ -123,7 +132,17 @@ class LessonPlanCubit extends Cubit<LessonPlanState> {
     required String durationInMinutes,
     required String subjectuuid,
     required String topics,
+    required String boardName,
+    required String gradeName,
+    required String subjectName,
   }) async {
+    // Store metadata for later use when saving history
+    _currentBoardName = boardName;
+    _currentGradeName = gradeName;
+    _currentSubjectName = subjectName;
+    _currentDuration = durationInMinutes;
+    _currentTopics = topics;
+
     try {
       // META DATA POST
       emit(
@@ -308,6 +327,24 @@ class LessonPlanCubit extends Cubit<LessonPlanState> {
         endpoint:
             "/lesson-plan/v1/instructional-framework-builder/$lessonPlanID",
         onSuccess: (data) {
+          // Save to Hive for history - only save when final generation is complete
+          // This ensures we have the complete content_generation data for PDF
+          try {
+            final historyModel = LessonPlanHistoryModel(
+              lessonPlanID: lessonPlanID,
+              data: data,
+              createdAt: DateTime.now(),
+              boardName: _currentBoardName,
+              gradeName: _currentGradeName,
+              subjectName: _currentSubjectName,
+              duration: _currentDuration,
+              topics: _currentTopics,
+            );
+            HiveService.saveLessonPlan(historyModel);
+          } catch (e) {
+            log('Error saving lesson plan to history: $e');
+          }
+
           emit(
             LessonPlanGeneration(
               lessonPlanID: lessonPlanID,

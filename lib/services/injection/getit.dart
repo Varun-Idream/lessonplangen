@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get_it/get_it.dart';
 import 'package:lessonplan/bloc/lessonplan/lesson_plan_cubit.dart';
+import 'package:lessonplan/bloc/lessonplan_history/lesson_plan_history_cubit.dart';
 import 'package:lessonplan/util/router/router.dart';
 
 final sl = GetIt.instance;
@@ -11,4 +12,5 @@ Future<void> init() async {
 
   // Cubits
   sl.registerLazySingleton(() => LessonPlanCubit());
+  sl.registerLazySingleton(() => LessonPlanHistoryCubit());
 }

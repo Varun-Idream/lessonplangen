@@ -324,6 +324,9 @@ class _LessonPlanFormState extends State<LessonPlanForm> {
                                         .toString(),
                                     subjectuuid: selectedSubject.value!.uuid,
                                     topics: topicController.text,
+                                    boardName: selectedBoard.value!.name,
+                                    gradeName: selectedGrade.value!.name,
+                                    subjectName: selectedSubject.value!.name,
                                   );
                                 } catch (e) {
                                   ScaffoldMessenger.of(context).showSnackBar(
