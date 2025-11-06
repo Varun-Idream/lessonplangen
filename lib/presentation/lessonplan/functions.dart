@@ -86,7 +86,7 @@ class LessonPlanFunctions {
 
       final pageFormat = PdfPageFormat(
         PdfPageFormat.a4.width,
-        1000,
+        1200,
       );
 
       final pageTheme = await loadPageTheme(
@@ -184,13 +184,13 @@ class LessonPlanFunctions {
                 fontSize: 10,
               ),
             ),
-            pw.SizedBox(height: 8),
+            pw.SizedBox(height: 5),
             ...List.generate(
               implS.length,
               (index) {
                 final impl = implS[index];
                 return pw.Container(
-                  margin: pw.EdgeInsets.only(bottom: 8),
+                  margin: pw.EdgeInsets.only(bottom: 5),
                   child: pw.Row(
                     crossAxisAlignment: pw.CrossAxisAlignment.start,
                     children: [
