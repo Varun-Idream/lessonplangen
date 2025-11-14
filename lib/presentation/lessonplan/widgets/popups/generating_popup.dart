@@ -1,4 +1,4 @@
-import 'dart:io';
+// import 'dart:io';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -49,9 +49,8 @@ class GeneratingLessonPlanPopup extends StatelessWidget {
                   context.router.pop();
                   generationState.value = 0.0;
 
-                  LessonPlanFunctions.processPDF(
-                    generatedData: state.data,
-                  ).then((fileBytes) {
+                  HtmlGenerator.generateLessonHtml(state.data)
+                      .then((htmlString) {
                     if (sl<AppRouter>().navigatorKey.currentContext != null) {
                       showDialog(
                         context: sl<AppRouter>().navigatorKey.currentContext!,
@@ -61,11 +60,15 @@ class GeneratingLessonPlanPopup extends StatelessWidget {
                               context.router.pop();
                               selectedTab.value = 0;
                             },
-                            downloadPdf: () {
-                              final fileHandle = File(
-                                "${Directory.current.path}\\${"Lesson Plan-${state.data["topic"]}.pdf"}",
+                            downloadHTML: () {
+                              // final fileHandle = File(
+                              //   "${Directory.current.path}\\${"Lesson Plan-${state.data["topic"]}.pdf"}",
+                              // );
+                              // fileHandle.writeAsBytesSync(fileBytes);
+                              HtmlGenerator.downloadHtml(
+                                htmlString,
+                                state.data["topic"],
                               );
-                              fileHandle.writeAsBytesSync(fileBytes);
                             },
                           );
                         },
@@ -80,6 +83,38 @@ class GeneratingLessonPlanPopup extends StatelessWidget {
                       );
                     }
                   });
+
+                  // LessonPlanFunctions.processPDF(
+                  //   generatedData: state.data,
+                  // ).then((fileBytes) {
+                  //   if (sl<AppRouter>().navigatorKey.currentContext != null) {
+                  //     showDialog(
+                  //       context: sl<AppRouter>().navigatorKey.currentContext!,
+                  //       builder: (context) {
+                  //         return SuccessCreatedPopup(
+                  //           lessonPlanHistory: () {
+                  //             context.router.pop();
+                  //             selectedTab.value = 0;
+                  //           },
+                  //           downloadPdf: () {
+                  //             final fileHandle = File(
+                  //               "${Directory.current.path}\\${"Lesson Plan-${state.data["topic"]}.pdf"}",
+                  //             );
+                  //             fileHandle.writeAsBytesSync(fileBytes);
+                  //           },
+                  //         );
+                  //       },
+                  //     );
+                  //   }
+                  // }).catchError((e) {
+                  //   if (context.mounted) {
+                  //     ScaffoldMessenger.of(context).showSnackBar(
+                  //       SnackBar(
+                  //         content: Text('$e'),
+                  //       ),
+                  //     );
+                  //   }
+                  // });
 
                   break;
                 default:

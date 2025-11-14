@@ -8,11 +8,11 @@ import 'package:lessonplan/util/constants/constants.dart';
 
 class SuccessCreatedPopup extends StatelessWidget {
   final VoidCallback lessonPlanHistory;
-  final VoidCallback downloadPdf;
+  final VoidCallback downloadHTML;
   const SuccessCreatedPopup({
     super.key,
     required this.lessonPlanHistory,
-    required this.downloadPdf,
+    required this.downloadHTML,
   });
 
   @override
@@ -76,8 +76,8 @@ class SuccessCreatedPopup extends StatelessWidget {
                 Flexible(
                   fit: FlexFit.tight,
                   child: CustomButton(
-                    title: 'Download PDF',
-                    onTap: downloadPdf,
+                    title: 'Download HTML',
+                    onTap: downloadHTML,
                   ),
                 )
               ],

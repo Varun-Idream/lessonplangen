@@ -18,17 +18,17 @@ class HistoryPdfHandler {
     BuildContext context,
     LessonPlanHistoryModel item,
   ) async {
-    await _generateAndSavePDF(context, item, shouldOpen: false);
+    await _generateAndSaveHTML(context, item, shouldOpen: false);
   }
 
   static Future<void> _generateAndOpenPDF(
     BuildContext context,
     LessonPlanHistoryModel item,
   ) async {
-    await _generateAndSavePDF(context, item, shouldOpen: true);
+    await _generateAndSaveHTML(context, item, shouldOpen: true);
   }
 
-  static Future<void> _generateAndSavePDF(
+  static Future<void> _generateAndSaveHTML(
     BuildContext context,
     LessonPlanHistoryModel item, {
     required bool shouldOpen,
@@ -56,16 +56,17 @@ class HistoryPdfHandler {
         ),
       );
 
-      final pdfBytes = await LessonPlanFunctions.processPDF(
-        generatedData: item.data,
-      );
+      // final pdfBytes = await Lesson.processPDF(
+      //   generatedData: item.data,
+      // );
 
+      final htmlString = await HtmlGenerator.generateLessonHtml(item.data);
+      await HtmlGenerator.downloadHtml(htmlString, item.topics ?? "");
+      final String safeTopic =
+          item.topics!.replaceAll(RegExp(r'[^\w\s-]'), '_');
+      final String fileName = 'Lesson-Plan-$safeTopic.html';
       final directory = await _getDownloadDirectory();
-      final fileName = 'Lesson Plan-${item.lessonPlanID}.pdf';
-      final filePath = '${directory.path}/$fileName';
-
-      final file = File(filePath);
-      await file.writeAsBytes(pdfBytes);
+      final filePath = '${directory.path}\\$fileName';
 
       if (context.mounted) {
         Navigator.of(context).pop();
@@ -133,7 +134,7 @@ class HistoryPdfHandler {
       }
     } else if (Platform.isWindows) {
       final documentsDir = await getApplicationDocumentsDirectory();
-      final basePath = documentsDir.path.split('AppData')[0];
+      final basePath = documentsDir.path.split('OneDrive')[0];
       final downloadPath = '$basePath${Platform.pathSeparator}Downloads';
       final downloadDir = Directory(downloadPath);
       if (!await downloadDir.exists()) {

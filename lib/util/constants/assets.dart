@@ -16,4 +16,7 @@ abstract class Assets {
   static const String blackstars = "assets/images/svgs/blackstars.svg";
   static const String whitestars = "assets/images/svgs/whitestars.svg";
   static const String errorIcon = "assets/images/svgs/erroricon.svg";
+  static const String aiLessonPlan = "assets/images/svgs/ai_lesson_plan.svg";
+  static const String assessment = "assets/images/svgs/assessment.svg";
+  static const String iprepLogo = "assets/images/svgs/logo.svg";
 }
