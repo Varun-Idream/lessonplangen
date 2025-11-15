@@ -151,14 +151,14 @@ class GeneratingAssessmentPopup extends StatelessWidget {
               ),
               const SizedBox(height: 15),
               Text(
-                "Generating Your Assessment",
+                "Creating Assessment",
                 style: TextStyles.textMedium18.copyWith(
                   fontWeight: FontWeight.w600,
                 ),
               ),
               const SizedBox(height: 12),
               Text(
-                "We're preparing a customized assessment \n based on your selections. This may take a \n few seconds.",
+                "Please wait while your AI-generated assessment is being prepared.\n This process may take a few moments to complete. \n\n Avoid closing until the assessment creation is complete.",
                 style: TextStyle(
                   color: ColorConstants.grey,
                   fontSize: 14,

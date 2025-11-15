@@ -49,6 +49,8 @@ class _AssessmentFormState extends State<AssessmentForm> {
     fillintheblanks.addListener(isFormValid);
     matchthecolumns.addListener(isFormValid);
     veryshortans.addListener(isFormValid);
+    shortans.addListener(isFormValid);
+    longans.addListener(isFormValid);
     super.initState();
   }
 
@@ -108,7 +110,7 @@ class _AssessmentFormState extends State<AssessmentForm> {
         }
 
         if (state is AssessmentLoadingState) {
-          if (state.status == LessonPlanStatus.metaDataPostLoading) {
+          if (state.status == AssessmentGenStatus.metaDataPostLoading) {
             showDialog(
               context: context,
               barrierDismissible: false,
@@ -374,6 +376,14 @@ class _AssessmentFormState extends State<AssessmentForm> {
                             notifier: veryshortans,
                             label: "Very Short Answers",
                           ),
+                          LabeledCounter(
+                            notifier: shortans,
+                            label: "Short Answers",
+                          ),
+                          LabeledCounter(
+                            notifier: longans,
+                            label: "Long Answers",
+                          ),
                         ],
                       ),
                     ),
@@ -418,15 +428,24 @@ class _AssessmentFormState extends State<AssessmentForm> {
                           final numQuestions =
                               int.parse(numberOfQuestionsController.text);
                           sl<AssessmentCubit>().generateAssessment(
-                            boarduuid: selectedBoard.value!.uuid,
-                            gradeuuid: selectedGrade.value!.uuid,
-                            subjectuuid: selectedSubject.value!.uuid,
-                            numberOfQuestions: numQuestions,
-                            topic: topicController.text,
-                            boardName: selectedBoard.value!.name,
-                            gradeName: selectedGrade.value!.name,
-                            subjectName: selectedSubject.value!.name,
-                          );
+                              boarduuid: selectedBoard.value!.uuid,
+                              gradeuuid: selectedGrade.value!.uuid,
+                              subjectuuid: selectedSubject.value!.uuid,
+                              numberOfQuestions: numQuestions,
+                              topic: topicController.text,
+                              boardName: selectedBoard.value!.name,
+                              gradeName: selectedGrade.value!.name,
+                              subjectName: selectedSubject.value!.name,
+                              questionDistribution: {
+                                "mcq_single_answer": mcqsingle.value,
+                                "mcq_multiple_answer": mcqmultiple.value,
+                                "true_false": truefalse.value,
+                                "fill_in_the_blanks": fillintheblanks.value,
+                                "very_short_answer": veryshortans.value,
+                                "short_answer": shortans.value,
+                                "long_answer": longans.value,
+                                "match_the_column": matchthecolumns.value,
+                              });
                         }
                       },
                     )
@@ -451,6 +470,8 @@ class _AssessmentFormState extends State<AssessmentForm> {
     fillintheblanks.value = 0;
     matchthecolumns.value = 0;
     veryshortans.value = 0;
+    shortans.value = 0;
+    longans.value = 0;
 
     mcqmultiple.removeListener(isFormValid);
     mcqmultiple.removeListener(isFormValid);
@@ -458,6 +479,8 @@ class _AssessmentFormState extends State<AssessmentForm> {
     fillintheblanks.removeListener(isFormValid);
     matchthecolumns.removeListener(isFormValid);
     veryshortans.removeListener(isFormValid);
+    shortans.removeListener(isFormValid);
+    longans.removeListener(isFormValid);
     super.dispose();
   }
 }

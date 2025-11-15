@@ -7,10 +7,10 @@ import 'package:lessonplan/util/constants/color_constants.dart';
 import 'package:lessonplan/presentation/lessonplan/widgets/history/history_table_cells.dart';
 
 class HistoryTable extends StatelessWidget {
-  final List<LessonPlanHistoryModel> history;
+  final List history;
   final ScrollController scrollController;
-  final Function(LessonPlanHistoryModel) onView;
-  final Function(LessonPlanHistoryModel) onDownload;
+  final Function(dynamic historymodel) onView;
+  final Function(dynamic historymodel) onDownload;
 
   const HistoryTable({
     super.key,
@@ -60,10 +60,10 @@ class HistoryTable extends StatelessWidget {
 }
 
 class _TableContent extends StatelessWidget {
-  final List<LessonPlanHistoryModel> history;
+  final List<dynamic> history;
   final double availableWidth;
-  final Function(LessonPlanHistoryModel) onView;
-  final Function(LessonPlanHistoryModel) onDownload;
+  final Function(dynamic) onView;
+  final Function(dynamic) onDownload;
 
   const _TableContent({
     required this.history,

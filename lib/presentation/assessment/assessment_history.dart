@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lessonplan/bloc/assessment_history/assessment_history_cubit.dart';
 import 'package:lessonplan/models/assessment_history_model.dart';
-import 'package:lessonplan/models/lesson_plan_history_model.dart';
 import 'package:lessonplan/services/injection/getit.dart';
 import 'package:lessonplan/util/constants/color_constants.dart';
 import 'package:lessonplan/util/constants/constants.dart';
@@ -121,8 +120,8 @@ class _AssessmentHistoryState extends State<AssessmentHistory> {
 
     // Adapt AssessmentHistoryModel to LessonPlanHistoryModel for HistoryTable reuse
     final adaptedHistory = history
-        .map((a) => LessonPlanHistoryModel(
-              lessonPlanID: a.assessmentID,
+        .map((a) => AssessmentHistoryModel(
+              assessmentID: a.assessmentID,
               data: a.data,
               createdAt: a.createdAt,
               boardName: a.boardName,

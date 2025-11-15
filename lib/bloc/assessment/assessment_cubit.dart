@@ -138,7 +138,7 @@ class AssessmentCubit extends Cubit<AssessmentState> {
     required String boardName,
     required String gradeName,
     required String subjectName,
-    Map<String, int>? questionDistribution,
+    required Map<String, int>? questionDistribution,
   }) async {
     // store metadata for saving history later
     _currentBoardName = boardName;
@@ -155,11 +155,12 @@ class AssessmentCubit extends Cubit<AssessmentState> {
       );
 
       // Default distributions
-      final qd = questionDistribution ?? {
-        'multiple_choice': (numberOfQuestions * 0.5).toInt(),
-        'true_false': (numberOfQuestions * 0.3).toInt(),
-        'short_answer': (numberOfQuestions * 0.2).toInt(),
-      };
+      final qd = questionDistribution ??
+          {
+            'multiple_choice': (numberOfQuestions * 0.5).toInt(),
+            'true_false': (numberOfQuestions * 0.3).toInt(),
+            'short_answer': (numberOfQuestions * 0.2).toInt(),
+          };
 
       final difficultyDistribution = {
         'easy': 30,
@@ -300,7 +301,7 @@ class AssessmentCubit extends Cubit<AssessmentState> {
           emit(
             AssessmentGeneration(
               assessmentID: assessmentID,
-              data: data,
+              data: data["question_configuration"],
               status: AssessmentGenStatus.finalizeDataGet,
             ),
           );
@@ -308,7 +309,7 @@ class AssessmentCubit extends Cubit<AssessmentState> {
           Future.delayed(Duration(milliseconds: 500), () {
             startGeneration(
               assessmentID: assessmentID,
-              questionConfigData: data,
+              questionConfigData: data["question_configuration"],
             );
           });
         },

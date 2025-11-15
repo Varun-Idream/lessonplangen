@@ -14,3 +14,5 @@ ValueNotifier<int> truefalse = ValueNotifier(0);
 ValueNotifier<int> fillintheblanks = ValueNotifier(0);
 ValueNotifier<int> matchthecolumns = ValueNotifier(0);
 ValueNotifier<int> veryshortans = ValueNotifier(0);
+ValueNotifier<int> shortans = ValueNotifier(0);
+ValueNotifier<int> longans = ValueNotifier(0);

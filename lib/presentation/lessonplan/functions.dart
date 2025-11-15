@@ -990,7 +990,7 @@ class HtmlGenerator {
     final String subject = generatedData["subject"]?["name"] ?? "N/A";
     final int duration = generatedData["duration_minutes"] ?? 0;
     final String formattedDate =
-        "${DateTime.now().month}/${DateTime.now().day}/${DateTime.now().year}"; // Simple date format
+        DateFormat.yMMMMd('en_US').format(DateTime.now()); // Simple date format
 
     final List learningObjectives = generatedData['learning_standards']
                 ?['smart_learning_objectives']?['objects']
@@ -1097,7 +1097,7 @@ class HtmlGenerator {
     buffer.writeln(
         '            <div class="text-left md:text-right text-lesson-body text-sm mt-4 md:mt-0 flex-shrink-0">');
     buffer.writeln('                <p>Created By: Mr. Varun Dev</p>');
-    buffer.writeln('                <p class="mt-1">$formattedDate</p>');
+    buffer.writeln('                <p class="mt-1">Date: $formattedDate</p>');
     buffer.writeln('            </div>');
     buffer.writeln('        </header>');
     buffer.writeln('        <!-- Main Content -->');

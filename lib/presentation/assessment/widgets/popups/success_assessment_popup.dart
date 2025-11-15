@@ -43,7 +43,7 @@ class SuccessAssessmentPopup extends StatelessWidget {
             ),
             const SizedBox(height: 15),
             Text(
-              "Assessment Created \n Successfully!",
+              "Assessment Generated Successfully",
               style: TextStyles.textMedium18.copyWith(
                 fontWeight: FontWeight.w600,
                 color: ColorConstants.primaryBlack,
@@ -52,7 +52,7 @@ class SuccessAssessmentPopup extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             Text(
-              "Your AI-powered assessment is ready to use. \n All your generated assessments are \n automatically saved in History for future \n access.",
+              "Your AI-generated assessment has been successfully created All your generated \n Assessments are automatically saved in History for future access.",
               style: TextStyle(
                 color: ColorConstants.grey,
                 fontSize: 14,
