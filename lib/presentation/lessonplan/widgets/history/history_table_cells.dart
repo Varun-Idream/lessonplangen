@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:lessonplan/models/lesson_plan_history_model.dart';
 import 'package:lessonplan/util/constants/color_constants.dart';
 import 'package:lessonplan/util/constants/constants.dart';
 
@@ -117,7 +116,7 @@ class HistoryTableHeaderCell extends StatelessWidget {
 }
 
 class HistoryTableActionsCell extends StatelessWidget {
-  final LessonPlanHistoryModel item;
+  final dynamic item;
   final VoidCallback onView;
   final VoidCallback onDownload;
 
@@ -166,4 +165,3 @@ class HistoryTableActionsCell extends StatelessWidget {
     );
   }
 }
-

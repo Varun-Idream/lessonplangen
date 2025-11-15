@@ -2,8 +2,8 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lessonplan/bloc/assessment/assessment_cubit.dart';
-import 'package:lessonplan/presentation/assessment/assessment_functions.dart';
 import 'package:lessonplan/presentation/assessment/assessment_plan_screen.dart';
+import 'package:lessonplan/presentation/assessment/functions.dart';
 import 'package:lessonplan/presentation/core/fade_in_modal.dart';
 import 'package:lessonplan/presentation/assessment/widgets/popups/success_assessment_popup.dart';
 import 'package:lessonplan/services/injection/getit.dart';
@@ -67,7 +67,7 @@ class GeneratingAssessmentPopup extends StatelessWidget {
                           downloadHTML: () {
                             AssessmentHtmlGenerator.downloadHtml(
                               htmlString,
-                              "Assessment",
+                              state.data["topic"],
                             );
                           },
                         );

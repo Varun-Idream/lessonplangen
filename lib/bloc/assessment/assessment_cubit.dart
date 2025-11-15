@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lessonplan/config/config_reader.dart';
 import 'package:lessonplan/models/form_data_models.dart';
 import 'package:lessonplan/models/assessment_history_model.dart';
+import 'package:lessonplan/presentation/assessment/functions.dart';
 import 'package:lessonplan/services/api/api.service.dart';
 import 'package:lessonplan/services/hive_service.dart';
 import 'package:lessonplan/util/constants/constants.dart';
@@ -169,10 +170,10 @@ class AssessmentCubit extends Cubit<AssessmentState> {
       };
 
       final bloomDistribution = {
-        "remember": 30,
-        "understand": 30,
-        "apply": 30,
-        "analyze": 10,
+        "remember": 0,
+        "understand": 0,
+        "apply": 100,
+        "analyze": 0,
         "evaluate": 0,
         "create": 0
       };
@@ -440,6 +441,22 @@ class AssessmentCubit extends Cubit<AssessmentState> {
       );
     } catch (e) {
       onFailure(e);
+    }
+  }
+
+  /// Generate and download assessment HTML
+  Future<void> generateAndDownloadHTML(
+    Map<String, dynamic> assessmentData,
+    String topic,
+  ) async {
+    try {
+      final htmlContent = await AssessmentHtmlGenerator.generateAssessmentHtml(
+        {'data': assessmentData},
+      );
+      await AssessmentHtmlGenerator.downloadHtml(htmlContent, topic);
+    } catch (e) {
+      log('Error generating/downloading HTML: $e');
+      rethrow;
     }
   }
 }

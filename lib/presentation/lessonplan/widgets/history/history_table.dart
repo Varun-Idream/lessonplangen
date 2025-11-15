@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:lessonplan/bloc/assessment_history/assessment_history_cubit.dart';
 import 'package:lessonplan/bloc/lessonplan_history/lesson_plan_history_cubit.dart';
 import 'package:lessonplan/models/lesson_plan_history_model.dart';
 import 'package:lessonplan/services/injection/getit.dart';
@@ -122,8 +123,14 @@ class _TableContent extends StatelessWidget {
     );
   }
 
-  TableRow _buildDataRow(LessonPlanHistoryModel item, int serialNumber, bool hasBorder) {
-    final cubit = sl<LessonPlanHistoryCubit>();
+  TableRow _buildDataRow(dynamic item, int serialNumber, bool hasBorder) {
+    // ignore: prefer_typing_uninitialized_variables
+    late var cubit;
+    if (item is LessonPlanHistoryModel) {
+      cubit = sl<LessonPlanHistoryCubit>();
+    } else {
+      cubit = sl<AssessmentHistoryCubit>();
+    }
     final creator = cubit.getCreator(item);
     final dateFormat = DateFormat('dd-MM-yyyy');
     final formattedDate = dateFormat.format(item.createdAt);
@@ -177,4 +184,3 @@ class _TableContent extends StatelessWidget {
     return topic.length > 30 ? '${topic.substring(0, 30)}...' : topic;
   }
 }
-

@@ -171,14 +171,14 @@ class _AssessmentHistoryState extends State<AssessmentHistory> {
                     scrollController: _horizontalScrollController,
                     onView: (lpItem) {
                       final matching = history.firstWhere(
-                          (a) => a.assessmentID == lpItem.lessonPlanID,
+                          (a) => a.assessmentID == lpItem.assessmentID,
                           orElse: () => history.first);
                       AssessmentHistoryPdfHandler.viewAssessmentHistory(
                           context, matching);
                     },
                     onDownload: (lpItem) {
                       final matching = history.firstWhere(
-                          (a) => a.assessmentID == lpItem.lessonPlanID,
+                          (a) => a.assessmentID == lpItem.assessmentID,
                           orElse: () => history.first);
                       AssessmentHistoryPdfHandler.downloadAssessmentHistory(
                           context, matching);

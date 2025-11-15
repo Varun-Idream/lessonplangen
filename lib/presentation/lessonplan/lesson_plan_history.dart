@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lessonplan/bloc/lessonplan_history/lesson_plan_history_cubit.dart';
-import 'package:lessonplan/models/lesson_plan_history_model.dart';
 import 'package:lessonplan/services/injection/getit.dart';
 import 'package:lessonplan/util/constants/color_constants.dart';
 import 'package:lessonplan/util/constants/constants.dart';
@@ -114,7 +113,7 @@ class _LessonPlanHistoryState extends State<LessonPlanHistory> {
     return const SizedBox.shrink();
   }
 
-  Widget _buildHistoryContent(List<LessonPlanHistoryModel> history) {
+  Widget _buildHistoryContent(List history) {
     final screenHeight = MediaQuery.of(context).size.height;
     final availableHeight = screenHeight - 200;
 
