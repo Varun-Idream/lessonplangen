@@ -11,6 +11,22 @@
 part of 'router.dart';
 
 /// generated route for
+/// [AssessmentAIScreen]
+class AssessmentAIRoute extends PageRouteInfo<void> {
+  const AssessmentAIRoute({List<PageRouteInfo>? children})
+      : super(AssessmentAIRoute.name, initialChildren: children);
+
+  static const String name = 'AssessmentAIRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const AssessmentAIScreen();
+    },
+  );
+}
+
+/// generated route for
 /// [DashboardScreen]
 class DashboardRoute extends PageRouteInfo<void> {
   const DashboardRoute({List<PageRouteInfo>? children})

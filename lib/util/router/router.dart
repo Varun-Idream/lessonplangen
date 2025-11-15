@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:lessonplan/presentation/assessment/assessment_plan_screen.dart';
 import 'package:lessonplan/presentation/dahsboard/dashboard.dart';
 import 'package:lessonplan/presentation/lessonplan/lesson_plan_screen.dart';
 
@@ -21,6 +22,10 @@ class AppRouter extends RootStackRouter {
         AutoRoute(
           page: LessonPlanRoute.page,
           path: "/lessonplan",
+        ),
+        AutoRoute(
+          page: AssessmentAIRoute.page,
+          path: "/assessment-ai",
         ),
       ];
 

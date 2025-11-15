@@ -4,7 +4,11 @@ import 'package:lessonplan/util/constants/color_constants.dart';
 import 'package:lessonplan/util/constants/constants.dart';
 
 class HistoryEmptyState extends StatelessWidget {
-  const HistoryEmptyState({super.key});
+  final String screen;
+  const HistoryEmptyState({
+    super.key,
+    required this.screen,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +37,7 @@ class HistoryEmptyState extends StatelessWidget {
               ),
               const SizedBox(height: 32),
               Text(
-                'No Lesson Plan Found',
+                'No ${screen.capitalize()} Found',
                 style: TextStyles.textSemiBold16.copyWith(
                   color: ColorConstants.primaryBlack,
                   fontSize: 20,
@@ -43,7 +47,7 @@ class HistoryEmptyState extends StatelessWidget {
               ),
               const SizedBox(height: 12),
               Text(
-                'It looks like for the class/grade and subject you selected, no lesson plan is available.\nPlease create a new lesson plan or change filter',
+                'It looks like for the class/grade and subject you selected, no $screen are available.\nPlease create a new ${screen.substring(0, screen.length - 1)} or change filter',
                 style: TextStyles.textRegular16.copyWith(
                   color: ColorConstants.mediumGrey3,
                   fontSize: 14,
@@ -56,5 +60,14 @@ class HistoryEmptyState extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+extension on String {
+  String capitalize() {
+    return split(' ')
+        .map((word) =>
+            word.isEmpty ? '' : word[0].toUpperCase() + word.substring(1))
+        .join(' ');
   }
 }

@@ -1111,7 +1111,8 @@ class HtmlGenerator {
         b.writeln('<li>No learning objectives specified.</li>');
       } else {
         for (final objective in learningObjectives) {
-          b.writeln('<li>${_sanitize(objective.toString())}</li>');
+          b.writeln(
+              '<li>${_sanitize(_decodeUnicode(objective.toString()))}</li>');
         }
       }
       b.writeln('</ul>');
@@ -1253,7 +1254,7 @@ class HtmlGenerator {
           .split('\n')
           .where((line) => line.trim().isNotEmpty);
       for (final line in lines) {
-        buffer.writeln('<li>${_sanitize(line)}</li>');
+        buffer.writeln('<li>${_sanitize(_decodeUnicode(line))}</li>');
       }
       buffer.writeln('</ul>');
       buffer.writeln('</div>');
@@ -1267,7 +1268,7 @@ class HtmlGenerator {
       buffer.writeln('<div class="space-y-2 text-lesson-body text-sm">');
       for (int i = 0; i < formativeQuestions.length; i++) {
         buffer.writeln(
-            '<p><strong class="text-gray-700">Q${i + 1}.</strong> ${_sanitize(formativeQuestions[i].toString())}</p>');
+            '<p><strong class="text-gray-700">Q${i + 1}.</strong> ${_sanitize(_decodeUnicode(formativeQuestions[i].toString()))}</p>');
       }
       buffer.writeln('</div>');
       buffer.writeln('</div>');
@@ -1281,7 +1282,7 @@ class HtmlGenerator {
       buffer.writeln('<div class="space-y-2 text-lesson-body text-sm">');
       for (int i = 0; i < expectedResponses.length; i++) {
         buffer.writeln(
-            '<p><strong class="text-gray-700">Ans ${i + 1}.</strong> ${_sanitize(expectedResponses[i].toString())}</p>');
+            '<p><strong class="text-gray-700">Ans ${i + 1}.</strong> ${_sanitize(_decodeUnicode(expectedResponses[i].toString()))}</p>');
       }
       buffer.writeln('</div>');
       buffer.writeln('</div>');
@@ -1295,16 +1296,13 @@ class HtmlGenerator {
           '<div class="w-10 h-10 rounded-full bg-white flex items-center justify-center flex-shrink-0 shadow-sm">');
       buffer.writeln('<!-- Inline SVG for notesIcon -->');
       buffer.writeln(
-          '<svg class="w-5 h-5 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">');
-      buffer.writeln(
-          '<path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12m-1.5-3v-3m0 0H8.25m2.25 0v3m0-3H12m0 0v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H12m0 0h1.125a2.25 2.25 0 0 1 2.25 2.25v1.5m-3 0V5.625a1.125 1.125 0 0 0-1.125-1.125H10.5m0 0H8.25m2.25 0a3.375 3.375 0 0 1 3.375 3.375v1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 1-3.375-3.375m0 0H8.25" />');
-      buffer.writeln('</svg>');
+          '<svg width="16" height="18" viewBox="0 0 16 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15.497 6.114v9.553l-3.29 1.642-3.104-1.482-.935-.446 3.46-9.399z" fill="#F2F8FF"/><path d="M13.06 8.896c-.275 2.855-.85 8.413-.85 8.413l-3.105-1.482z" fill="#E5F0FC"/><path d="M5.821 4.306C4.634 9.529 0 13.422 0 13.422L8.854 18c4.547-4.544 4.822-10.582 4.822-10.582z" fill="#F2F8FF"/><path d="M15.861 4.149v2.135l-2.187 1.134L5.18 4.426V2.11l2.635-.917 6.769 2.487z" fill="#1D7EED"/><path d="M15.864 4.15v2.134l-2.187 1.134-.056-2.05s.45-.8.966-1.688z" fill="#07F"/><path d="m15.861 4.149-2.243 1.218L5.18 2.11l2.635-.917 6.769 2.487z" fill="#2B8EFF"/><path d="m15.2 3.906-.561-.207c.066-.476-.065-.864-.387-1.004-.521-.226-1.346.278-1.843 1.125s-.477 1.718.044 1.944c0 0 .248.515-.49.584-.875-.38-1.014-1.659-.312-2.857s1.98-1.862 2.854-1.483c.64.278.887 1.04.696 1.898M10.75 2.27l-.546-.2c.163-.597.051-1.11-.331-1.276-.521-.226-1.346.278-1.842 1.125-.497.848-.478 1.718.043 1.944 0 0 .287.656-.491.583-.874-.379-1.014-1.658-.311-2.856.703-1.2 1.98-1.863 2.854-1.483.706.307.933 1.2.624 2.163" fill="#212121"/><path d="m10.018 14.316-1.301.446-6.024 2.063-1.148-.209-1.24-.225a.355.355 0 0 1-.217-.583l1.554-1.783 7.326-2.51z" fill="#FDC500"/><path d="m8.717 14.763-6.024 2.063-1.148-.209a4 4 0 0 1-.092-.372l6.717-1.88.097-.028s.185.17.45.426" fill="#F6D14F"/><path d="m2.693 16.825-1.886-.342-.501-.092c-.282-.05-.402-.372-.218-.582l.326-.375 1.228-1.409c-.013.04-.532 1.568 1.051 2.8" fill="#FFEBD3"/><path d="m.807 16.482-.501-.091c-.282-.051-.402-.372-.218-.583l.326-.374s-.189.598.393 1.048" fill="#51518E"/><path d="M9.56 14.944c.688-.279.921-1.307.52-2.296-.401-.99-1.285-1.565-1.974-1.286-.688.28-.921 1.308-.52 2.297s1.285 1.565 1.973 1.285" fill="#E5F0FC"/><path d="m11.161 13.855-.04.013-1.29.442c-.427.146-1-.334-1.277-1.072-.277-.74-.154-1.457.275-1.604l1.329-.455.07-.018c.418-.077.945.39 1.207 1.09.277.739.155 1.457-.274 1.604" fill="#BAF064"/><path d="m11.16 13.855-.04.013c-.419.08-.947-.388-1.21-1.09-.277-.738-.154-1.456.274-1.603l.043-.014c.419-.077.946.39 1.208 1.09.277.739.154 1.457-.274 1.604" fill="#8AC926"/></svg>');
       buffer.writeln('</div>');
       buffer.writeln('<div>');
       buffer.writeln(
           '<h4 class="text-sm font-bold text-lesson-dark">Teacher Notes:</h4>');
       buffer.writeln('<p class="text-lesson-body text-sm mt-1">');
-      buffer.writeln(_sanitize(teacherNotes));
+      buffer.writeln(_sanitize(_decodeUnicode(teacherNotes)));
       buffer.writeln('</p>');
       buffer.writeln('</div>');
       buffer.writeln('</div>');
@@ -1312,6 +1310,13 @@ class HtmlGenerator {
 
     buffer.writeln('</div>');
   }
+
+  /// Decodes Unicode escape sequences in a string.
+  /// For example, \u221a5 becomes √5
+  static String _decodeUnicode(String s) => s.replaceAllMapped(
+        RegExp(r'\\u([0-9a-fA-F]{4})'),
+        (Match m) => String.fromCharCode(int.parse(m.group(1)!, radix: 16)),
+      );
 
   /// Simple HTML sanitizer to prevent basic injection issues from data
   static String _sanitize(String text) {

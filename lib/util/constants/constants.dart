@@ -33,6 +33,29 @@ enum LessonPlanStatus {
   internalFailure,
 }
 
+enum AssessmentGenStatus {
+  metaDataPostLoading,
+  metaDataPostFailure,
+  metaDataGetLoading,
+  metaDataGet,
+  metaDataGetFailure,
+  finalizeDataPostLoading,
+  finalizeDataPost,
+  finalizeDataPostFailure,
+  finalizeDataGetLoading,
+  finalizeDataGet,
+  finalizeDataGetFailure,
+  generationDataPostLoading,
+  generationDataPost,
+  generationDataPostFailure,
+  generationDataGetLoading,
+  generationDataGet,
+  generationDataGetFailure,
+  exsists,
+  limitReached,
+  internalFailure,
+}
+
 abstract class TextStyles {
   static const textMedium15 = TextStyle(
     fontSize: 18,

@@ -98,7 +98,9 @@ class DashboardScreen extends StatelessWidget {
                         child: AssetSvg(Assets.assessment),
                       ),
                     ),
-                    callback: () {},
+                    callback: () {
+                      sl<AppRouter>().push(AssessmentAIRoute());
+                    },
                   )
                 ],
               )
