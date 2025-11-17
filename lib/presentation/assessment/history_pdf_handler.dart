@@ -53,7 +53,7 @@ class AssessmentHistoryPdfHandler {
 
       final String safeTopic =
           (item.topics ?? 'assessment').replaceAll(RegExp(r'[^\w\s-]'), '_');
-      final String fileName = 'Worksheet-$safeTopic.html';
+      final String fileName = 'Assessment-$safeTopic.html';
       final directory = await _getDownloadDirectory();
       final filePath = '${directory.path}${Platform.pathSeparator}$fileName';
 
@@ -111,17 +111,19 @@ class AssessmentHistoryPdfHandler {
         final basePath = directory.path.split('Android')[0];
         final downloadPath = '$basePath${Platform.pathSeparator}Download';
         final downloadDir = Directory(downloadPath);
-        if (!await downloadDir.exists())
+        if (!await downloadDir.exists()) {
           await downloadDir.create(recursive: true);
+        }
         return downloadDir;
       }
     } else if (Platform.isWindows) {
       final documentsDir = await getApplicationDocumentsDirectory();
       final basePath = documentsDir.path.split('OneDrive')[0];
-      final downloadPath = '$basePath${Platform.pathSeparator}Downloads';
+      final downloadPath = '${basePath}Downloads';
       final downloadDir = Directory(downloadPath);
-      if (!await downloadDir.exists())
+      if (!await downloadDir.exists()) {
         await downloadDir.create(recursive: true);
+      }
       return downloadDir;
     } else if (Platform.isMacOS || Platform.isIOS) {
       final documentsDir = await getApplicationDocumentsDirectory();
