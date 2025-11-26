@@ -1,4 +1,4 @@
-package com.example.lessonplan
+package com.idream.android
 
 import io.flutter.embedding.android.FlutterActivity
 

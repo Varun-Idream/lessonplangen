@@ -20,91 +20,93 @@ class DashboardScreen extends StatelessWidget {
     return Scaffold(
       key: scaffoldKey,
       // drawer: const CustomDrawer(),
-      body: Container(
-        alignment: Alignment.center,
-        constraints: BoxConstraints(
-          maxHeight: size.height,
-          maxWidth: size.width,
-        ),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // DashboardHeader(),
-              SizedBox(
-                width: 180,
-                child: FittedBox(
-                  fit: BoxFit.fitWidth,
-                  child: AssetSvg(Assets.iprepLogo),
-                ),
-              ),
-              const SizedBox(height: 50),
-              Text(
-                "Your AI Powered Assistant",
-                style: TextStyles.textBold32.copyWith(
-                  color: ColorConstants.primaryBlack,
-                  letterSpacing: 2,
-                  fontSize: 42,
-                  fontFamily: "Inter",
-                ),
-              ),
-              Text(
-                "For Effortless Learning & Teaching",
-                style: TextStyles.textBold32.copyWith(
-                  color: ColorConstants.primaryBlack,
-                  letterSpacing: 0,
-                  fontFamily: "Inter",
-                ),
-              ),
-              const SizedBox(height: 80),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SelectionTiles(
-                    title: 'AI Lesson Plan',
-                    subText: 'Generate & Manage Lesson Plans',
-                    icon: Container(
-                      height: 60,
-                      width: 60,
-                      decoration: BoxDecoration(
-                        color: ColorConstants.backgroundBlue2,
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      padding: const EdgeInsets.all(5.0),
-                      child: FittedBox(
-                        fit: BoxFit.fitWidth,
-                        child: AssetSvg(Assets.aiLessonPlan),
-                      ),
-                    ),
-                    callback: () {
-                      sl<AppRouter>().push(LessonPlanRoute());
-                    },
+      body: SafeArea(
+        child: Container(
+          alignment: Alignment.center,
+          constraints: BoxConstraints(
+            maxHeight: size.height,
+            maxWidth: size.width,
+          ),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // DashboardHeader(),
+                SizedBox(
+                  width: 180,
+                  child: FittedBox(
+                    fit: BoxFit.fitWidth,
+                    child: AssetSvg(Assets.iprepLogo),
                   ),
-                  const SizedBox(width: 40),
-                  SelectionTiles(
-                    title: 'AI Assessment',
-                    subText: 'Create & Manage Custom Tests',
-                    icon: Container(
-                      height: 60,
-                      width: 60,
-                      decoration: BoxDecoration(
-                        color: ColorConstants.backgroundBlue2,
-                        borderRadius: BorderRadius.circular(6),
+                ),
+                const SizedBox(height: 50),
+                Text(
+                  "Your AI Powered Assistant",
+                  style: TextStyles.textBold32.copyWith(
+                    color: ColorConstants.primaryBlack,
+                    letterSpacing: 2,
+                    fontSize: 42,
+                    fontFamily: "Inter",
+                  ),
+                ),
+                Text(
+                  "For Effortless Learning & Teaching",
+                  style: TextStyles.textBold32.copyWith(
+                    color: ColorConstants.primaryBlack,
+                    letterSpacing: 0,
+                    fontFamily: "Inter",
+                  ),
+                ),
+                const SizedBox(height: 80),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SelectionTiles(
+                      title: 'AI Lesson Plan',
+                      subText: 'Generate & Manage Lesson Plans',
+                      icon: Container(
+                        height: 60,
+                        width: 60,
+                        decoration: BoxDecoration(
+                          color: ColorConstants.backgroundBlue2,
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        padding: const EdgeInsets.all(5.0),
+                        child: FittedBox(
+                          fit: BoxFit.fitWidth,
+                          child: AssetSvg(Assets.aiLessonPlan),
+                        ),
                       ),
-                      padding: const EdgeInsets.all(5.0),
-                      child: FittedBox(
-                        fit: BoxFit.fitWidth,
-                        child: AssetSvg(Assets.assessment),
-                      ),
+                      callback: () {
+                        sl<AppRouter>().push(LessonPlanRoute());
+                      },
                     ),
-                    callback: () {
-                      sl<AppRouter>().push(AssessmentAIRoute());
-                    },
-                  )
-                ],
-              )
-            ],
+                    const SizedBox(width: 40),
+                    SelectionTiles(
+                      title: 'AI Assessment',
+                      subText: 'Create & Manage Custom Tests',
+                      icon: Container(
+                        height: 60,
+                        width: 60,
+                        decoration: BoxDecoration(
+                          color: ColorConstants.backgroundBlue2,
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        padding: const EdgeInsets.all(5.0),
+                        child: FittedBox(
+                          fit: BoxFit.fitWidth,
+                          child: AssetSvg(Assets.assessment),
+                        ),
+                      ),
+                      callback: () {
+                        sl<AppRouter>().push(AssessmentAIRoute());
+                      },
+                    )
+                  ],
+                )
+              ],
+            ),
           ),
         ),
       ),

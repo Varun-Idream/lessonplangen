@@ -21,62 +21,64 @@ class _LessonPlanScreenState extends State<LessonPlanScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ColorConstants.primaryWhite,
-      body: Column(
-        children: [
-          CommonHeader(
-            title: 'AI Lesson Plan',
-            headerPadding: const EdgeInsets.symmetric(
-              vertical: 12,
-              horizontal: 25,
-            ),
-          ),
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  ValueListenableBuilder(
-                    valueListenable: selectedTab,
-                    builder: (context, value, child) {
-                      return CustomToggle(
-                        selectedIndex: value,
-                        labelPadding:
-                            EdgeInsetsGeometry.symmetric(horizontal: 10),
-                        labelStyle: TextStyle(
-                          fontSize: 16,
-                          fontFamily: "Inter",
-                          fontWeight: FontWeight.w600,
-                          color: ColorConstants.primaryBlue,
-                        ),
-                        margin: const EdgeInsets.symmetric(vertical: 15),
-                        toggleTabs: [
-                          ToggleTabs(label: 'Lesson Plan History'),
-                          ToggleTabs(label: 'Lesson Plan Builder'),
-                        ],
-                        onChanged: (index) {
-                          selectedTab.value = index;
-                        },
-                      );
-                    },
-                  ),
-                  ValueListenableBuilder(
-                    valueListenable: selectedTab,
-                    builder: (context, value, child) {
-                      switch (value) {
-                        case 0:
-                          return LessonPlanHistory();
-                        case 1:
-                          return LessonPlanBuilder();
-                        default:
-                          return SizedBox();
-                      }
-                    },
-                  ),
-                  const SizedBox(height: 20)
-                ],
+      body: SafeArea(
+        child: Column(
+          children: [
+            CommonHeader(
+              title: 'AI Lesson Plan',
+              headerPadding: const EdgeInsets.symmetric(
+                vertical: 12,
+                horizontal: 25,
               ),
             ),
-          ),
-        ],
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    ValueListenableBuilder(
+                      valueListenable: selectedTab,
+                      builder: (context, value, child) {
+                        return CustomToggle(
+                          selectedIndex: value,
+                          labelPadding:
+                              EdgeInsetsGeometry.symmetric(horizontal: 10),
+                          labelStyle: TextStyle(
+                            fontSize: 16,
+                            fontFamily: "Inter",
+                            fontWeight: FontWeight.w600,
+                            color: ColorConstants.primaryBlue,
+                          ),
+                          margin: const EdgeInsets.symmetric(vertical: 15),
+                          toggleTabs: [
+                            ToggleTabs(label: 'Lesson Plan History'),
+                            ToggleTabs(label: 'Lesson Plan Builder'),
+                          ],
+                          onChanged: (index) {
+                            selectedTab.value = index;
+                          },
+                        );
+                      },
+                    ),
+                    ValueListenableBuilder(
+                      valueListenable: selectedTab,
+                      builder: (context, value, child) {
+                        switch (value) {
+                          case 0:
+                            return LessonPlanHistory();
+                          case 1:
+                            return LessonPlanBuilder();
+                          default:
+                            return SizedBox();
+                        }
+                      },
+                    ),
+                    const SizedBox(height: 20)
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -125,7 +125,7 @@ class HistoryPdfHandler {
       final directory = await getExternalStorageDirectory();
       if (directory != null) {
         final basePath = directory.path.split('Android')[0];
-        final downloadPath = '$basePath${Platform.pathSeparator}Download';
+        final downloadPath = '${basePath}Downloads';
         final downloadDir = Directory(downloadPath);
         if (!await downloadDir.exists()) {
           await downloadDir.create(recursive: true);

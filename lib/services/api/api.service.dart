@@ -11,7 +11,7 @@ class ApiService {
 
   static Dio cgfDio = Dio(
     BaseOptions(
-      baseUrl: "https://api-staging.crazygoldfish.com",
+      baseUrl: "https://api.crazygoldfish.com",
     ),
   );
 
