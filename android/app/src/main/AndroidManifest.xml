@@ -45,7 +45,7 @@
     <uses-permission android:name="android.settings.MANAGE_EXTERNAL_STORAGE" />
 
     <application
-        android:label="iPrep Digital Class"
+        android:label="iPrep AI Tools"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:usesCleartextTraffic="true"

@@ -1,4 +1,4 @@
-// import 'dart:io';
+import 'dart:io';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -50,7 +50,7 @@ class GeneratingLessonPlanPopup extends StatelessWidget {
                   generationState.value = 0.0;
 
                   HtmlGenerator.generateLessonHtml(state.data)
-                      .then((htmlString) {
+                      .then((htmlString) async {
                     if (sl<AppRouter>().navigatorKey.currentContext != null) {
                       showDialog(
                         context: sl<AppRouter>().navigatorKey.currentContext!,
@@ -60,15 +60,48 @@ class GeneratingLessonPlanPopup extends StatelessWidget {
                               context.router.pop();
                               selectedTab.value = 0;
                             },
-                            downloadHTML: () {
-                              // final fileHandle = File(
-                              //   "${Directory.current.path}\\${"Lesson Plan-${state.data["topic"]}.pdf"}",
-                              // );
-                              // fileHandle.writeAsBytesSync(fileBytes);
-                              HtmlGenerator.downloadHtml(
+                            downloadHTML: () async {
+                              final savedPath =
+                                  await HtmlGenerator.downloadHtml(
                                 htmlString,
                                 state.data["topic"],
                               );
+                              if (sl<AppRouter>().navigatorKey.currentContext !=
+                                  null) {
+                                final ctx = sl<AppRouter>()
+                                    .navigatorKey
+                                    .currentContext!;
+                                if (savedPath != null) {
+                                  ScaffoldMessenger.of(ctx).showSnackBar(
+                                    SnackBar(
+                                      content: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          const Text(
+                                              'HTML downloaded successfully!'),
+                                          const SizedBox(height: 4),
+                                          Text(
+                                              'Location: ${File(savedPath).parent.path}',
+                                              style: const TextStyle(
+                                                  fontSize: 12)),
+                                        ],
+                                      ),
+                                      backgroundColor:
+                                          ColorConstants.naturalGreen,
+                                    ),
+                                  );
+                                } else {
+                                  ScaffoldMessenger.of(ctx).showSnackBar(
+                                    const SnackBar(
+                                      content: Text('Failed to download HTML'),
+                                      backgroundColor:
+                                          ColorConstants.primaryRed,
+                                    ),
+                                  );
+                                }
+                              }
                             },
                           );
                         },

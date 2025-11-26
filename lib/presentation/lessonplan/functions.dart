@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:math' show Random;
 
-import 'package:file_saver/file_saver.dart';
+import 'package:lessonplan/services/file_download_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -1137,26 +1137,19 @@ class HtmlGenerator {
 
   /// Triggers a download/save dialog for the generated HTML content.
   /// Requires the `file_saver` package.
-  static Future<void> downloadHtml(String htmlContent, String topic) async {
+  /// Save generated HTML content to Downloads and return saved file path.
+  /// Returns null if saving failed.
+  static Future<String?> downloadHtml(String htmlContent, String topic) async {
     try {
-      // Sanitize topic for use in a filename
       final String safeTopic = topic.replaceAll(RegExp(r'[^\w\s-]'), '_');
       final String fileName = 'Lesson-Plan-$safeTopic.html';
 
-      // Convert the string content to Uint8List
-      Uint8List bytes = utf8.encode(htmlContent);
+        final Uint8List bytes = Uint8List.fromList(utf8.encode(htmlContent));
 
-      // Use FileSaver to save the file
-      // This works on Web, Android, iOS, Windows, macOS, and Linux
-      await FileSaver.instance.saveFile(
-        name: fileName,
-        bytes: bytes,
-        mimeType: MimeType.custom,
-        customMimeType: "text/html",
-      );
+        final savedPath = await FileDownloadService.saveBytesToDownloads(bytes, fileName);
+      return savedPath;
     } catch (e) {
       debugPrint('Error saving HTML file: $e');
-      // Handle or rethrow the error as needed
       rethrow;
     }
   }

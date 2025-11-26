@@ -2,8 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:lessonplan/models/assessment_history_model.dart';
 import 'package:lessonplan/util/constants/color_constants.dart';
-import 'package:open_file/open_file.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 import 'functions.dart';
 
@@ -48,30 +47,45 @@ class AssessmentHistoryPdfHandler {
 
       final htmlString =
           await AssessmentHtmlGenerator.generateAssessmentHtml(item.data);
-      await AssessmentHtmlGenerator.downloadHtml(
+      final savedPath = await AssessmentHtmlGenerator.downloadHtml(
           htmlString, item.topics ?? 'assessment');
-
-      final String safeTopic =
-          (item.topics ?? 'assessment').replaceAll(RegExp(r'[^\w\s-]'), '_');
-      final String fileName = 'Assessment-$safeTopic.html';
-      final directory = await _getDownloadDirectory();
-      final filePath = '${directory.path}${Platform.pathSeparator}$fileName';
 
       if (context.mounted) Navigator.of(context).pop();
 
-      if (shouldOpen) {
-        final result = await OpenFile.open(filePath);
+      if (savedPath == null) {
         if (context.mounted) {
-          if (result.type != ResultType.done) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                  content: Text('Error opening file: ${result.message}'),
-                  backgroundColor: ColorConstants.primaryRed),
-            );
-          }
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Failed to save assessment'),
+              backgroundColor: ColorConstants.primaryRed,
+            ),
+          );
         }
+        return;
+      }
+
+      if (shouldOpen) {
+        if (!context.mounted) return;
+        showDialog(
+          context: context,
+          builder: (ctx) => Dialog(
+            insetPadding: const EdgeInsets.all(12),
+            child: SizedBox(
+              width: double.infinity,
+              height: MediaQuery.of(context).size.height * 0.85,
+              child: InAppWebView(
+                initialUrlRequest:
+                    URLRequest(url: WebUri.uri(Uri.file(savedPath))),
+                initialSettings: InAppWebViewSettings(
+                  useShouldOverrideUrlLoading: true,
+                ),
+              ),
+            ),
+          ),
+        );
       } else {
         if (context.mounted) {
+          final dir = File(savedPath).parent.path;
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Column(
@@ -80,8 +94,7 @@ class AssessmentHistoryPdfHandler {
                 children: [
                   const Text('HTML downloaded successfully!'),
                   const SizedBox(height: 4),
-                  Text('Location: ${directory.path}',
-                      style: const TextStyle(fontSize: 12)),
+                  Text('Location: $dir', style: const TextStyle(fontSize: 12)),
                 ],
               ),
               backgroundColor: ColorConstants.naturalGreen,
@@ -104,45 +117,14 @@ class AssessmentHistoryPdfHandler {
     }
   }
 
-  static Future<Directory> _getDownloadDirectory() async {
-    if (Platform.isAndroid) {
-      final directory = await getExternalStorageDirectory();
-      if (directory != null) {
-        final basePath = directory.path.split('Android')[0];
-        final downloadPath = '$basePath${Platform.pathSeparator}Download';
-        final downloadDir = Directory(downloadPath);
-        if (!await downloadDir.exists()) {
-          await downloadDir.create(recursive: true);
-        }
-        return downloadDir;
-      }
-    } else if (Platform.isWindows) {
-      final documentsDir = await getApplicationDocumentsDirectory();
-      final basePath = documentsDir.path.split('OneDrive')[0];
-      final downloadPath = '${basePath}Downloads';
-      final downloadDir = Directory(downloadPath);
-      if (!await downloadDir.exists()) {
-        await downloadDir.create(recursive: true);
-      }
-      return downloadDir;
-    } else if (Platform.isMacOS || Platform.isIOS) {
-      final documentsDir = await getApplicationDocumentsDirectory();
-      final downloadPath =
-          '${documentsDir.path}${Platform.pathSeparator}Downloads';
-      final downloadDir = Directory(downloadPath);
-      if (!await downloadDir.exists())
-        await downloadDir.create(recursive: true);
-      return downloadDir;
-    }
-
-    return await getApplicationDocumentsDirectory();
-  }
+  // Download directory resolved via FileDownloadService; local helper removed.
 
   static bool _isValidAssessmentData(Map<String, dynamic> data) {
     try {
       // Consider valid if it has either question configuration or generated questions
-      if (data['question_configuration'] == null && data['questions'] == null)
+      if (data['question_configuration'] == null && data['questions'] == null) {
         return false;
+      }
       return true;
     } catch (e) {
       return false;

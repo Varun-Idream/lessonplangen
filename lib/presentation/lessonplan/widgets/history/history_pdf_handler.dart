@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:lessonplan/models/lesson_plan_history_model.dart';
 import 'package:lessonplan/presentation/lessonplan/functions.dart';
 import 'package:lessonplan/util/constants/color_constants.dart';
-import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 class HistoryPdfHandler {
   static Future<void> viewLessonPlan(
@@ -61,41 +61,55 @@ class HistoryPdfHandler {
       // );
 
       final htmlString = await HtmlGenerator.generateLessonHtml(item.data);
-      await HtmlGenerator.downloadHtml(htmlString, item.topics ?? "");
-      final String safeTopic =
-          item.topics!.replaceAll(RegExp(r'[^\w\s-]'), '_');
-      final String fileName = 'Lesson-Plan-$safeTopic.html';
-      final directory = await _getDownloadDirectory();
-      final filePath = '${directory.path}\\$fileName';
+      final savedPath =
+          await HtmlGenerator.downloadHtml(htmlString, item.topics ?? "");
 
-      if (context.mounted) {
-        Navigator.of(context).pop();
+      if (context.mounted) Navigator.of(context).pop();
+
+      if (savedPath == null) {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Failed to save lesson plan'),
+              backgroundColor: ColorConstants.primaryRed,
+            ),
+          );
+        }
+        return;
       }
 
       if (shouldOpen) {
-        final result = await OpenFile.open(filePath);
-        if (context.mounted) {
-          if (result.type != ResultType.done) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Error opening file: ${result.message}'),
-                backgroundColor: ColorConstants.primaryRed,
+        if (!context.mounted) return;
+        showDialog(
+          context: context,
+          builder: (ctx) => Dialog(
+            insetPadding: const EdgeInsets.all(12),
+            child: SizedBox(
+              width: double.infinity,
+              height: MediaQuery.of(context).size.height * 0.85,
+              child: InAppWebView(
+                initialUrlRequest:
+                    URLRequest(url: WebUri.uri(Uri.file(savedPath))),
+                initialSettings: InAppWebViewSettings(
+                  useShouldOverrideUrlLoading: true,
+                ),
               ),
-            );
-          }
-        }
+            ),
+          ),
+        );
       } else {
         if (context.mounted) {
+          final dir = File(savedPath).parent.path;
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('PDF downloaded successfully!'),
+                  const Text('Lesson plan downloaded successfully!'),
                   const SizedBox(height: 4),
                   Text(
-                    'Location: ${directory.path}',
+                    'Location: $dir',
                     style: const TextStyle(fontSize: 12),
                   ),
                 ],
@@ -120,40 +134,7 @@ class HistoryPdfHandler {
     }
   }
 
-  static Future<Directory> _getDownloadDirectory() async {
-    if (Platform.isAndroid) {
-      final directory = await getExternalStorageDirectory();
-      if (directory != null) {
-        final basePath = directory.path.split('Android')[0];
-        final downloadPath = '${basePath}Downloads';
-        final downloadDir = Directory(downloadPath);
-        if (!await downloadDir.exists()) {
-          await downloadDir.create(recursive: true);
-        }
-        return downloadDir;
-      }
-    } else if (Platform.isWindows) {
-      final documentsDir = await getApplicationDocumentsDirectory();
-      final basePath = documentsDir.path.split('OneDrive')[0];
-      final downloadPath = '$basePath${Platform.pathSeparator}Downloads';
-      final downloadDir = Directory(downloadPath);
-      if (!await downloadDir.exists()) {
-        await downloadDir.create(recursive: true);
-      }
-      return downloadDir;
-    } else if (Platform.isMacOS || Platform.isIOS) {
-      final documentsDir = await getApplicationDocumentsDirectory();
-      final downloadPath =
-          '${documentsDir.path}${Platform.pathSeparator}Downloads';
-      final downloadDir = Directory(downloadPath);
-      if (!await downloadDir.exists()) {
-        await downloadDir.create(recursive: true);
-      }
-      return downloadDir;
-    }
-
-    return await getApplicationDocumentsDirectory();
-  }
+  // Download directory resolved via FileDownloadService; local helper removed.
 
   static bool _isValidLessonPlanData(Map<String, dynamic> data) {
     try {

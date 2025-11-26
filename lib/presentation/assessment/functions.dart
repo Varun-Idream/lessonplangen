@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:file_saver/file_saver.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:lessonplan/services/file_download_service.dart';
 
 class AssessmentHtmlGenerator {
   /// Generates the complete HTML content for an assessment as a string.
@@ -406,19 +406,16 @@ class AssessmentHtmlGenerator {
   }
 
   /// Triggers a download/save dialog for the generated HTML content.
-  static Future<void> downloadHtml(String htmlContent, String topic) async {
+  static Future<String?> downloadHtml(String htmlContent, String topic) async {
     try {
       final String safeTopic = topic.replaceAll(RegExp(r'[^\w\s-]'), '_');
       final String fileName = 'Assessment-$safeTopic.html';
 
-      Uint8List bytes = utf8.encode(htmlContent);
+      final Uint8List bytes = Uint8List.fromList(utf8.encode(htmlContent));
 
-      await FileSaver.instance.saveFile(
-        name: fileName,
-        bytes: bytes,
-        mimeType: MimeType.custom,
-        customMimeType: "text/html",
-      );
+      final savedPath =
+          await FileDownloadService.saveBytesToDownloads(bytes, fileName);
+      return savedPath;
     } catch (e) {
       debugPrint('Error saving HTML file: $e');
       rethrow;

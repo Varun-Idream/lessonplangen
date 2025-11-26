@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -64,11 +65,46 @@ class GeneratingAssessmentPopup extends StatelessWidget {
                             context.router.pop();
                             selectedTab.value = 0;
                           },
-                          downloadHTML: () {
-                            AssessmentHtmlGenerator.downloadHtml(
+                          downloadHTML: () async {
+                            final savedPath =
+                                await AssessmentHtmlGenerator.downloadHtml(
                               htmlString,
                               state.data["topic"],
                             );
+                            if (sl<AppRouter>().navigatorKey.currentContext !=
+                                null) {
+                              final ctx =
+                                  sl<AppRouter>().navigatorKey.currentContext!;
+                              if (savedPath != null) {
+                                ScaffoldMessenger.of(ctx).showSnackBar(
+                                  SnackBar(
+                                    content: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const Text(
+                                            'HTML downloaded successfully!'),
+                                        const SizedBox(height: 4),
+                                        Text(
+                                            'Location: ${File(savedPath).parent.path}',
+                                            style:
+                                                const TextStyle(fontSize: 12)),
+                                      ],
+                                    ),
+                                    backgroundColor:
+                                        ColorConstants.naturalGreen,
+                                  ),
+                                );
+                              } else {
+                                ScaffoldMessenger.of(ctx).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Failed to download HTML'),
+                                    backgroundColor: ColorConstants.primaryRed,
+                                  ),
+                                );
+                              }
+                            }
                           },
                         );
                       },
