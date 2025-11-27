@@ -59,7 +59,9 @@ class _FileViewerScreenState extends State<FileViewerScreen> {
               ),
               initialUrlRequest: URLRequest(
                 url: WebUri.uri(
-                  Uri.file(widget.filePath),
+                  Uri.file(
+                    widget.filePath,
+                  ),
                 ),
               ),
               onWebViewCreated: (controller) {

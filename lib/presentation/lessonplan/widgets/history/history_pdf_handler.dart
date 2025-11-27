@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:lessonplan/models/lesson_plan_history_model.dart';
 import 'package:lessonplan/presentation/lessonplan/functions.dart';
 import 'package:lessonplan/util/constants/color_constants.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 class HistoryPdfHandler {
@@ -56,10 +55,6 @@ class HistoryPdfHandler {
         ),
       );
 
-      // final pdfBytes = await Lesson.processPDF(
-      //   generatedData: item.data,
-      // );
-
       final htmlString = await HtmlGenerator.generateLessonHtml(item.data);
       final savedPath =
           await HtmlGenerator.downloadHtml(htmlString, item.topics ?? "");
@@ -80,7 +75,7 @@ class HistoryPdfHandler {
 
       if (shouldOpen) {
         if (!context.mounted) return;
-        showDialog(
+        await showDialog(
           context: context,
           builder: (ctx) => Dialog(
             insetPadding: const EdgeInsets.all(12),
@@ -88,8 +83,30 @@ class HistoryPdfHandler {
               width: double.infinity,
               height: MediaQuery.of(context).size.height * 0.85,
               child: InAppWebView(
-                initialUrlRequest:
-                    URLRequest(url: WebUri.uri(Uri.file(savedPath))),
+                // On Android load the saved file path; on Windows load the HTML string directly
+                initialUrlRequest: Platform.isAndroid
+                    ? URLRequest(
+                        url: WebUri.uri(
+                          Uri.file(savedPath),
+                        ),
+                      )
+                    : null,
+                initialData: Platform.isWindows
+                    ? InAppWebViewInitialData(
+                        data: htmlString,
+                        mimeType: 'text/html',
+                        encoding: 'utf-8',
+                      )
+                    : null,
+                onWebViewCreated: (controller) async {
+                  if (Platform.isWindows) {
+                    await controller.loadData(
+                      data: htmlString,
+                      mimeType: 'text/html',
+                      encoding: 'utf-8',
+                    );
+                  }
+                },
                 initialSettings: InAppWebViewSettings(
                   useShouldOverrideUrlLoading: true,
                 ),
@@ -99,21 +116,9 @@ class HistoryPdfHandler {
         );
       } else {
         if (context.mounted) {
-          final dir = File(savedPath).parent.path;
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text('Lesson plan downloaded successfully!'),
-                  const SizedBox(height: 4),
-                  Text(
-                    'Location: $dir',
-                    style: const TextStyle(fontSize: 12),
-                  ),
-                ],
-              ),
+              content: Text('Saved to $savedPath'),
               backgroundColor: ColorConstants.naturalGreen,
               duration: const Duration(seconds: 4),
             ),

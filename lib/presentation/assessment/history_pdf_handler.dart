@@ -74,8 +74,29 @@ class AssessmentHistoryPdfHandler {
               width: double.infinity,
               height: MediaQuery.of(context).size.height * 0.85,
               child: InAppWebView(
-                initialUrlRequest:
-                    URLRequest(url: WebUri.uri(Uri.file(savedPath))),
+                initialUrlRequest: Platform.isAndroid
+                    ? URLRequest(
+                        url: WebUri.uri(
+                          Uri.file(savedPath),
+                        ),
+                      )
+                    : null,
+                initialData: Platform.isWindows
+                    ? InAppWebViewInitialData(
+                        data: htmlString,
+                        mimeType: 'text/html',
+                        encoding: 'utf-8',
+                      )
+                    : null,
+                onWebViewCreated: (controller) async {
+                  if (Platform.isWindows) {
+                    await controller.loadData(
+                      data: htmlString,
+                      mimeType: 'text/html',
+                      encoding: 'utf-8',
+                    );
+                  }
+                },
                 initialSettings: InAppWebViewSettings(
                   useShouldOverrideUrlLoading: true,
                 ),
